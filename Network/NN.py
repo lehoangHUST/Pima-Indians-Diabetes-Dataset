@@ -1,5 +1,5 @@
 import numpy as np
-from Layer import Layer
+from Network.Layer import Layer
 """
     NN: is a simple neural network model for classification & regression problems
     ....
@@ -50,7 +50,6 @@ class NN:
             raise Exception("Invalid Type", type(layer), " != <class 'Layer'>")
         self._layers.append(layer)
 
-    
 
     # Train data
     def fit(self, learning_rate=0.01, iteration=1000):
@@ -80,8 +79,8 @@ class NN:
             else:
                 layer._setup(self._layers[index-1])
         ### setup and add output layer
-        output_layer = Layer( self._Y.shape[1], activation=self._output_activation)
-        output_layer._setup( self._layers[len(self._layers)-1] )
+        output_layer = Layer(self._Y.shape[1], activation=self._output_activation)
+        output_layer._setup(self._layers[len(self._layers)-1] )
         self.add_layer(output_layer)
 
 
@@ -92,7 +91,6 @@ class NN:
             else:
                 layer._foward(self._layers[index-1])
 
-
     def _backPropagation(self):
         delta = self._Y - self._layers[len(self._layers)-1].values
         for i in range(len(self._layers)-1, -1, -1):
@@ -100,7 +98,6 @@ class NN:
                 delta = self._layers[i]._backward(delta, self._X, self._learning_rate)
             else:
                 delta = self._layers[i]._backward(delta, self._layers[i-1], self._learning_rate)
-
 
     def predict(self, X_test):
         for index, layer in enumerate(self._layers):
@@ -114,12 +111,11 @@ class NN:
             return self._threshold_multiclass( self._layers[ len(self._layers)-1 ] )
         return self._threshold( self._layers[ len(self._layers)-1 ], 0.5 ) # binary classification
 
-
     # set the 'predict.value' > 'value' [treshhold] to '1' others to '0'
     def _threshold(self, target, value):
         predict = target.values
-        predict[predict<value] = 0
-        predict[predict>=value] = 1
+        predict[predict < value] = 0
+        predict[predict >= value] = 1
         return predict
 
     # set the max 'predict.value' to '1' others to '0'

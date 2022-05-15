@@ -1,5 +1,5 @@
 import numpy as np
-from act_functions import get_activation
+from utils.act_functions import get_activation
 
 """
     Layer : the hidden layer of neural network
