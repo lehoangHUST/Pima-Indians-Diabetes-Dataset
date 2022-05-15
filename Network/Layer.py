@@ -22,9 +22,9 @@ class Layer:
     # setup the hidden layer
     # config shape, weights, biases & initialize them
     def _setup(self, prev_layer):
-        self.shape = ( prev_layer.shape[0], ) + self.shape
-        self.weight = np.random.randn( prev_layer.shape[1], self.shape[1] ) / self._get_spec_number(prev_layer)
-        self.bias = np.random.randn(1, self.shape[1] ) / self._get_spec_number(prev_layer)
+        self.shape = (prev_layer.shape[0], ) + self.shape
+        self.weight = np.random.randn(prev_layer.shape[1], self.shape[1]) / self._get_spec_number(prev_layer)
+        self.bias = np.random.randn(1, self.shape[1]) / self._get_spec_number(prev_layer)
         self.values = np.zeros(self.shape)
 
     def _get_spec_number(self, prev_layer):
@@ -32,10 +32,10 @@ class Layer:
 
     def _foward(self, prev_layer):
         if isinstance(prev_layer, np.ndarray): # first hidden layer
-            self.z = np.dot( prev_layer, self.weight ) #+ self.bias
+            self.z = np.dot( prev_layer, self.weight) + self.bias
         else:
-            self.z  = np.dot( prev_layer.values, self.weight ) #+ self.bias
-        self.values = self._act_function( self.z )
+            self.z = np.dot(prev_layer.values, self.weight) + self.bias
+        self.values = self._act_function(self.z)
 
     def _backward(self, delta, prev_layer, learning_rate):
         

@@ -1,5 +1,6 @@
 import numpy as np
 from Network.Layer import Layer
+from sklearn.metrics import accuracy_score
 """
     NN: is a simple neural network model for classification & regression problems
     ....
@@ -43,27 +44,37 @@ class NN:
         self._layers = []
         self._output_activation = output_activation
 
-    
-    
     def add_layer(self, layer):
         if not isinstance(layer, Layer):
             raise Exception("Invalid Type", type(layer), " != <class 'Layer'>")
         self._layers.append(layer)
 
-
     # Train data
     def fit(self, learning_rate=0.01, iteration=1000):
         self._setup()
         self._costs = []
+        self._epochs = []
+        self._accuracy = []
         self._learning_rate = learning_rate
         self._iteration = iteration
         for i in range(iteration):
             self._fowardPropagation()
             self._backPropagation()
             print(self._calc_cost(self._layers[len(self._layers)-1].values))
-            if(i%100 == 0):
-                self._costs.append( self._calc_cost(self._layers[len(self._layers)-1].values) )
-        
+            if i % 100 == 0:
+                self._epochs.append(i)
+                # Calculate cost by formula Binary-cross-entropy
+                self._costs.append(self._calc_cost(self._layers[len(self._layers)-1].values))
+                # Calculate accuracy
+                pred = self.predict(self._X)
+                self._accuracy.append(accuracy_score(pred, self._Y))
+
+        # Dict history include epochs : loss_train, accuracy_train
+        history = {}
+        history['epochs'] = self._epochs
+        history['loss'] = self._costs
+        history['accuracy'] = self._accuracy
+        return history
 
     # return the cost function
     def _calc_cost(self, Y_pred):
@@ -74,15 +85,14 @@ class NN:
     # add output layer
     def _setup(self):
         for index, layer in enumerate(self._layers):
-            if(index == 0): # first hidden layer
+            if index == 0: # first hidden layer
                 layer._setup(self._X)
             else:
                 layer._setup(self._layers[index-1])
-        ### setup and add output layer
+        # setup and add output layer
         output_layer = Layer(self._Y.shape[1], activation=self._output_activation)
         output_layer._setup(self._layers[len(self._layers)-1] )
         self.add_layer(output_layer)
-
 
     def _fowardPropagation(self):
         for index, layer in enumerate(self._layers):
