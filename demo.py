@@ -16,11 +16,11 @@ feature, targets = data[:, :-1], data[:, -1].reshape(-1, 1)
 X_train, X_test, Y_train, Y_test = train_test_split(feature, targets, test_size=0.2)
 # create the network
 nn_model = NN(X_train, Y_train)
-nn_model.add_layer(Layer(24, activation='relu'))
-nn_model.add_layer(Layer(12, activation='sigmoid'))
+nn_model.add_layer(Layer(10, activation='relu'))
+nn_model.add_layer(Layer(10, activation='sigmoid'))
 
 #fit the network
-nn_model.fit(iteration=10000, learning_rate=0.01)
+nn_model.fit(iteration=10000, learning_rate=0.001)
 
 # plot cost function
 

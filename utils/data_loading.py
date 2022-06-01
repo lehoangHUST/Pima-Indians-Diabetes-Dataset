@@ -1,5 +1,6 @@
 import numpy as np
 import pandas as pd
+import matplotlib.pyplot as plt
 import csv
 import os
 
@@ -25,7 +26,6 @@ class Dataset:
             mean_data = np.nanmean(data[:, 1:6], axis=0)
             for idx, mean in enumerate(mean_data):
                 data[:, idx+1] = np.where(np.isnan(data[:, idx + 1]), mean, data[:, idx + 1])
-                print(data[:, idx+1])
         elif mode == 'median':
             median_data = np.nanmedian(data[:, 1:6], axis=0)
             for idx, median in enumerate(median_data):
@@ -54,7 +54,24 @@ class Dataset:
         else:
             raise FileNotFoundError
 
+    @staticmethod
+    def visualize_label(label):
+        # Convert float -> int
+        label = np.array(label, dtype=np.bool_)
+        label_zeros = len(label[label==False])
+        label_ones = len(label[label==True])
+        fig = plt.figure(figsize=(10, 5))
+
+        # creating the bar plot
+        plt.bar([0, 1], [label_zeros, label_ones], color='maroon',
+                width=0.4)
+
+        plt.xlabel('Label')
+        plt.ylabel('Count label')
+        plt.show()
+
 
 if __name__ == '__main__':
     Data = Dataset().load('D:/Machine_Learning/Pima-Indians-Diabetes-Dataset/pima-indians-diabetes.csv')
     data = Dataset().preprocess(Data, mode='mean')
+    Dataset().show_label(data[:, -1])

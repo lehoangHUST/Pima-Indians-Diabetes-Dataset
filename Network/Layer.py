@@ -14,6 +14,7 @@ from utils.act_functions import get_activation
             default -> 'sigmoid'
 """
 
+
 class Layer:
     def __init__(self, shape, activation='sigmoid'):
         self._act_function, self._act_function_der = get_activation(activation)
@@ -22,7 +23,7 @@ class Layer:
     # setup the hidden layer
     # config shape, weights, biases & initialize them
     def _setup(self, prev_layer):
-        self.shape = (prev_layer.shape[0], ) + self.shape
+        self.shape = (prev_layer.shape[0],) + self.shape
         self.weight = np.random.randn(prev_layer.shape[1], self.shape[1]) / self._get_spec_number(prev_layer)
         self.bias = np.random.randn(1, self.shape[1]) / self._get_spec_number(prev_layer)
         self.values = np.zeros(self.shape)
@@ -31,19 +32,19 @@ class Layer:
         return self.shape[1] * prev_layer.shape[1]
 
     def _foward(self, prev_layer):
-        if isinstance(prev_layer, np.ndarray): # first hidden layer
-            self.z = np.dot( prev_layer, self.weight) + self.bias
+        if isinstance(prev_layer, np.ndarray):  # first hidden layer
+            self.z = np.dot(prev_layer, self.weight) + self.bias
         else:
             self.z = np.dot(prev_layer.values, self.weight) + self.bias
         self.values = self._act_function(self.z)
 
     def _backward(self, delta, prev_layer, learning_rate):
-        
+
         delta = delta * self._act_function_der(self.z)
         # NOT SURE ABOUT THE DERIVATIVE OF BIAS
         # <CHECK-LATER>
-        delta_bias = np.sum(delta, axis=0).reshape(1,-1)
-        if isinstance(prev_layer, np.ndarray): #  first hidden layer
+        delta_bias = np.sum(delta, axis=0).reshape(1, -1)
+        if isinstance(prev_layer, np.ndarray):  # first hidden layer
             weight_der = np.dot(prev_layer.T, delta)
             # print(prev_layer.shape)
         else:
