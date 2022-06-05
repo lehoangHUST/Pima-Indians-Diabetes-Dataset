@@ -16,16 +16,26 @@ from utils.act_functions import get_activation
 
 
 class Layer:
-    def __init__(self, shape, activation='sigmoid'):
+    def __init__(self, shape, activation='sigmoid', he_normal='random'):
         self._act_function, self._act_function_der = get_activation(activation)
         self.shape = (shape,)
+        self.he_normal = he_normal
 
     # setup the hidden layer
     # config shape, weights, biases & initialize them
     def _setup(self, prev_layer):
         # Add tuple
         self.shape = (prev_layer.shape[0],) + self.shape
-        self.weight = np.random.randn(prev_layer.shape[1], self.shape[1]) * np.sqrt(2 / prev_layer.shape[1])
+        if self.he_normal == 'random':
+            self.weight = np.random.randn(prev_layer.shape[1], self.shape[1])
+        elif self.he_normal == 'he':
+            self.weight = np.random.randn(prev_layer.shape[1], self.shape[1]) * np.sqrt(2 / prev_layer.shape[1])
+        elif self.he_normal == 'xavier':
+            self.weight = np.random.randn(prev_layer.shape[1], self.shape[1]) * np.sqrt(1 / prev_layer.shape[1])
+        elif self.he_normal == 'zeros':
+            self.weight = np.zeros(prev_layer.shape[1], self.shape[1])
+        else:
+            raise TypeError
         self.bias = np.random.randn(1, self.shape[1])
         self.values = np.zeros(self.shape)
 

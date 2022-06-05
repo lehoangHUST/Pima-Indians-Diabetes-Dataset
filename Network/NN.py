@@ -81,6 +81,7 @@ class NN:
 
     # return the cost function
     def _calc_cost(self, Y_pred):
+        print(Y_pred)
         return np.sum(np.square(self._Y - Y_pred) / 2)
 
     # configuration the shape,

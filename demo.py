@@ -15,10 +15,10 @@ feature, targets = data[:, :-1], data[:, -1].reshape(-1, 1)
 X_train, X_test, Y_train, Y_test = train_test_split(feature, targets, test_size=0.2)
 # create the network
 nn_model = NN(X_train, Y_train)
-nn_model.add_layer(Layer(10, activation='leaky_relu'))
-nn_model.add_layer(Layer(10, activation='leaky_relu'))
+nn_model.add_layer(Layer(10, activation='relu', he_normal='xavier'))
+nn_model.add_layer(Layer(10, activation='relu', he_normal='xavier'))
 
-#fit the networ k
+# fit the network
 nn_model.fit(iteration=10000, learning_rate=0.001)
 
 # plot cost function
