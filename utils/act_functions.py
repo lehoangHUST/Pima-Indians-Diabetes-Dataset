@@ -28,6 +28,20 @@ def relu_der():
     return _
 
 
+# leaky relu function
+def leaky_relu():
+    return lambda X: np.where(X >= 0, X, 0.01 * X)
+
+
+# leaky relu derivative
+def leaky_relu_der():
+    def _(X):
+        X[X <= 0] = 0.01
+        X[X > 0] = 1
+        return X
+    return _
+
+
 # softmax function
 def softmax():
     def _(X):
@@ -57,6 +71,8 @@ def get_activation(activation):
         return sigmoid(), sigmoid_der()
     elif activation == 'relu':
         return relu(), relu_der()
+    elif activation == 'leaky_relu':
+        return leaky_relu(), leaky_relu_der()
     elif activation == 'no_func':
         return no_func(), no_func_der()
     # default
