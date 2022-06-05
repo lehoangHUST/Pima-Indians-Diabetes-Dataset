@@ -63,7 +63,7 @@ class NN:
         for i in range(iteration):
             self._fowardPropagation()
             self._backPropagation()
-            print(self._calc_cost(self._layers[len(self._layers) - 1].values))
+            #print(self._calc_cost(self._layers[len(self._layers) - 1].values))
             if i % 100 == 0:
                 self._epochs.append(i)
                 # Calculate cost by formula Binary-cross-entropy

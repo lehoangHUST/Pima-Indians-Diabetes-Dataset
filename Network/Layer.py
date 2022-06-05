@@ -23,9 +23,10 @@ class Layer:
     # setup the hidden layer
     # config shape, weights, biases & initialize them
     def _setup(self, prev_layer):
+        # Add tuple
         self.shape = (prev_layer.shape[0],) + self.shape
-        self.weight = np.random.randn(prev_layer.shape[1], self.shape[1]) / self._get_spec_number(prev_layer)
-        self.bias = np.random.randn(1, self.shape[1]) / self._get_spec_number(prev_layer)
+        self.weight = np.random.randn(prev_layer.shape[1], self.shape[1]) * np.sqrt(2 / prev_layer.shape[1])
+        self.bias = np.random.randn(1, self.shape[1])
         self.values = np.zeros(self.shape)
 
     def _get_spec_number(self, prev_layer):
