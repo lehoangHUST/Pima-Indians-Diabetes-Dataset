@@ -63,7 +63,7 @@ class NN:
         for i in range(iteration):
             self._fowardPropagation()
             self._backPropagation()
-            #print(self._calc_cost(self._layers[len(self._layers) - 1].values))
+            print(self._calc_cost(self._layers[len(self._layers) - 1].values))
             if i % 100 == 0:
                 self._epochs.append(i)
                 # Calculate cost by formula Binary-cross-entropy
@@ -73,16 +73,12 @@ class NN:
                 self._accuracy.append(accuracy_score(pred, self._Y))
 
         # Dict history include epochs : loss_train, accuracy_train
-        history = {}
-        history['epochs'] = self._epochs
-        history['loss'] = self._costs
-        history['accuracy'] = self._accuracy
+        history = {'epochs': self._epochs, 'loss': self._costs, 'accuracy': self._accuracy}
         return history
 
     # return the cost function
     def _calc_cost(self, Y_pred):
-        print(Y_pred)
-        return np.sum(np.square(self._Y - Y_pred) / 2)
+        return -np.sum(self._Y * np.log(Y_pred) + (1 - self._Y) * np.log(1 - Y_pred))
 
     # configuration the shape,
     # weight and bias of each layer
@@ -101,7 +97,7 @@ class NN:
 
     def _fowardPropagation(self):
         for index, layer in enumerate(self._layers):
-            if (index == 0):  # first hidden layer
+            if index == 0:  # first hidden layer
                 layer._foward(self._X)
             else:
                 layer._foward(self._layers[index - 1])
@@ -116,7 +112,7 @@ class NN:
 
     def predict(self, X_test):
         for index, layer in enumerate(self._layers):
-            if (index == 0):
+            if index == 0:
                 layer._foward(X_test)
             else:
                 layer._foward(self._layers[index - 1])

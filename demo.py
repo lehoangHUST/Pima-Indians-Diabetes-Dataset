@@ -19,7 +19,7 @@ nn_model.add_layer(Layer(10, activation='relu', he_normal='xavier'))
 nn_model.add_layer(Layer(10, activation='relu', he_normal='xavier'))
 
 # fit the network
-nn_model.fit(iteration=10000, learning_rate=0.001)
+nn_model.fit(iteration=1, learning_rate=0.001)
 
 # plot cost function
 
